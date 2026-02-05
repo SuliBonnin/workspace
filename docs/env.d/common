@@ -1,0 +1,9 @@
+DOCS_HOST=http://docs.localhost
+KEYCLOAK_HOST=id.localhost
+S3_HOST=storage.localhost
+BACKEND_HOST=backend
+FRONTEND_HOST=frontend
+YPROVIDER_HOST=y-provider
+BUCKET_NAME=docs-media-storage
+REALM_NAME=docs
+#COLLABORATION_WS_URL=wss://http://docs.localhost/collaboration/ws/

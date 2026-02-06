@@ -1,9 +1,11 @@
 ## Django
-DJANGO_ALLOWED_HOSTS=http://docs.localhost
+DJANGO_ALLOWED_HOSTS=localhost,docs.localhost,127.0.0.1,frontend,backend
 DJANGO_SECRET_KEY=fwerntgjkoqwejadfopgfkropshjkrtop
 DJANGO_SETTINGS_MODULE=impress.settings
-DJANGO_CONFIGURATION=Production
-
+DJANGO_CONFIGURATION=Development
+SECURE_SSL_REDIRECT=False
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False
 # Logging
 # Set to DEBUG level for dev only
 LOGGING_LEVEL_HANDLERS_CONSOLE=ERROR

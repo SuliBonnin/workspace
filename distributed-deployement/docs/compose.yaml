@@ -22,7 +22,9 @@ services:
     user: ${DOCKER_USER:-1000}
     restart: always
     environment:
-      - DJANGO_CONFIGURATION=Production
+      - DJANGO_CONFIGURATION=Development
+    ports:
+      - "8000:8000"
     env_file:
       - env.d/common
       - env.d/backend
@@ -60,24 +62,19 @@ services:
     environment:
       - VIRTUAL_HOST=docs.localhost # used by nginx proxy
       - VIRTUAL_PORT=8083 # used by nginx proxy
-      # - LETSENCRYPT_HOST=docs.localhost # used by lets encrypt to generate TLS certificate
+    # - LETSENCRYPT_HOST=${DOCS_HOST} # used by lets encrypt to generate TLS certificate
     volumes:
       - ./default.conf.template:/etc/nginx/templates/docs.conf.template
-    networks:
-      - default
-      - proxy-tier
     depends_on:
       backend:
         condition: service_healthy
 
+    # Uncomment if using our nginx proxy example
+    networks:
+      - proxy-tier
+      - default
+
 # Uncomment if using our nginx proxy example
 networks:
-  default:
-    name: docs-network
   proxy-tier:
     external: true
-
-volumes:
-  html:
-  certs:
-  acme:

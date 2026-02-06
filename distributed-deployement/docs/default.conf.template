@@ -8,7 +8,7 @@ upstream docs_frontend {
 
 server {
     listen 8083;
-    server_name localhost;
+    server_name localhost docs.localhost;
     charset utf-8;
 
     # increase max upload size
@@ -17,19 +17,21 @@ server {
     # Disables server version feedback on pages and in headers
     server_tokens off;
 
-    proxy_ssl_server_name on;
-
     location @proxy_to_docs_backend {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto http; # Force http here
 
         proxy_redirect off;
-        proxy_pass http://docs_backend;
+        proxy_pass http://docs_backend; # Ensure this is NOT https
     }
 
     location @proxy_to_docs_frontend {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
 
         proxy_redirect off;
         proxy_pass http://docs_frontend;
@@ -66,7 +68,7 @@ server {
         proxy_send_timeout 86400;
 
         # Preserve original host and additional headers
-        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Proto http;
         proxy_set_header Origin $http_origin;
         proxy_set_header Host $host;
     }
@@ -91,7 +93,7 @@ server {
         proxy_set_header X-Amz-Content-SHA256 $authContentSha256;
 
         # Get resource from Minio
-        proxy_pass https://${S3_HOST}/${BUCKET_NAME}/;
+        proxy_pass http://${S3_HOST}/${BUCKET_NAME}/;
         proxy_set_header Host ${S3_HOST};
 
         proxy_ssl_name ${S3_HOST};
@@ -101,7 +103,7 @@ server {
 
     location /media-auth {
         proxy_pass http://docs_backend/api/v1.0/documents/media-auth/;
-        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Proto http;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

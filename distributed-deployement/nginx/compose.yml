@@ -16,7 +16,7 @@ services:
   #   image: nginxproxy/acme-companion
   #   container_name: nginx-proxy-acme
   #   environment:
-  #     - DEFAULT_EMAIL=you@karambola.io
+  #     - DEFAULT_EMAIL=mail@yourdomain.tld
   #   volumes_from:
   #     - nginx-proxy
   #   volumes:
